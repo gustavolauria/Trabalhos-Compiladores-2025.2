@@ -2,7 +2,7 @@ import java.io.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        FileReader fr = new FileReader("entrada_0.txt");
+        FileReader fr = new FileReader("src/entrada_0.txt");
         CalcScanner scanner = new CalcScanner(fr);
         String token;
 
