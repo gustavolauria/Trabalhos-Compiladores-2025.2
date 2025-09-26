@@ -25,9 +25,9 @@
 "//"                    { return "INT_DIV"; }
 "+"                     { return "PLUS"; }
 "-"                     { return "MINUS"; }
-"*"                     { return "TIMES"; } // A regra [*x] que você tinha também é válida!
+"*"                     { return "TIMES"; }
 "/"                     { return "DIV"; }
 
 
-/* Tratamento de Erros (sempre por último) */
+/* Tratamento de Erros */
 .                       { return "ERROR"; }
