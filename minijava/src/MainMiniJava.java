@@ -1,6 +1,6 @@
 import java.io.*;
 
-public class Main {
+public class MainMiniJava {
     public static void main(String[] args) throws IOException {
         String filePath = args[0];
         FileReader fr = new FileReader(filePath);

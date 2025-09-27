@@ -1,4 +1,20 @@
+# Regras Específicas do Projeto de Compiladores
+
+# Arquivos compilados do Java
+*.class
+
+# Arquivos de backup do editor (ex: nome~ )
+*~
+
+# Arquivos de scanner gerados pelo JFlex (não devem ser versionados)
+calculadora/src/CalcScanner.java
+minijava/src/MiniJavaScanner.java
+
+# Regras Padrão de IDEs
+
 ### IntelliJ IDEA ###
+.idea/
+*.iml
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
