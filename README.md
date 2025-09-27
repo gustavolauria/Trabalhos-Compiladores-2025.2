@@ -1,81 +1,100 @@
-# Calculadora com JFlex
+# Scanner para Calculadora e Mini-Java com JFlex
 
-Este projeto implementa uma calculadora utilizando **JFlex** para a análise léxica. O scanner gerado é capaz de reconhecer números inteiros, números de ponto flutuante (decimais) e múltiplos operadores aritméticos.
-
-## Recursos Implementados
-
-O analisador léxico reconhece os seguintes tokens:
-- **Números:** Inteiros e Decimais (ex: `10`, `12.5`).
-- **Operadores:** `+` (soma), `-` (subtração), `*` (multiplicação), `/` (divisão).
-- **Operadores Especiais:** `**` (potência), `//` (divisão inteira).
-- **Precedência:** `(` e `)` (parênteses).
+Este projeto implementa dois analisadores léxicos (scanners) utilizando **JFlex**: um para uma linguagem de **Calculadora** e outro para um subconjunto da linguagem Java, o **Mini-Java**.
 
 ## Estrutura do Projeto
 
-- **`libs/jflex-1.9.1.jar`** → Arquivo executável do JFlex.
-- **`src/Main.java`** → Classe principal que roda o analisador.
-- **`src/Calculadora.flex`** → Arquivo de especificação JFlex para gerar o scanner.
-- **`src/entrada_0.txt`** → Arquivo de entrada com expressões a serem analisadas.
+O repositório está organizado em subprojetos para cada linguagem:
 
-## Como Rodar o Projeto
+```
+Compiladores/
+├── calculadora/
+│   └── src/
+│       ├── Calculadora.flex
+│       ├── MainCalc.java
+│       └── testes/
+│           ├── entrada_calc_1.txt
+│           ├── ...
+│
+└── minijava/
+    └── src/
+        ├── MiniJava.flex
+        ├── MainMiniJava.java
+        └── testes/
+            ├── TesteBasico.java
+            └── ...
+```
+
+## Como Rodar os Projetos
 
 ### Pré-requisitos
 - Java (JDK) instalado.
+- Arquivo `jflex-1.9.1.jar` (ou similar) na pasta `libs/`.
 
-### 1. Gerar o Analisador Léxico
-No terminal, na pasta raiz do projeto, rode o comando abaixo.
+---
+### Para a Calculadora:
 
+Execute os seguintes comandos a partir da pasta raiz (`Compiladores`).
+
+**1. Gerar o Scanner:**
 ```bash
-java -jar libs/jflex-1.9.1.jar src/Calculadora.flex
+java -jar libs/jflex-1.9.1.jar calculadora/src/Calculadora.flex
 ```
-Isso vai gerar o arquivo `CalcScanner.java` dentro de `src/`.
 
-### 2. Compilar os Arquivos Java
-Ainda na pasta raiz do projeto:
-
+**2. Compilar:**
 ```bash
-javac src/*.java
+javac calculadora/src/*.java
 ```
 
-### 3. Executar o Programa
-Na raiz do projeto, rode o comando passando o arquivo de entrada como argumento:
-
+**3. Executar (Exemplo):**
 ```bash
-java -cp src Main src/entrada_0.txt
-```
-
-## Exemplo de Entrada
-
-Conteúdo do arquivo `entrada_0.txt`:
-
-```
-( 100.25 - ( 2.5 ** 3 ) ) // 10 * 5 + ( 144 / 12 )
+java -cp calculadora/src MainCalc calculadora/src/testes/entrada_calc_1.txt
 ```
 
 ---
+### Para o Mini-Java:
 
-## Saída Esperada
+Execute os seguintes comandos a partir da pasta raiz (`Compiladores`).
 
-Ao rodar o programa com a entrada de exemplo, a saída será a seguinte lista de tokens reconhecidos:
+**1. Gerar o Scanner:**
+```bash
+java -jar libs/jflex-1.9.1.jar minijava/src/MiniJava.flex
+```
+
+**2. Compilar:**
+```bash
+javac minijava/src/*.java
+```
+
+**3. Executar (Exemplo):**
+```bash
+java -cp minijava/src MainMiniJava minijava/src/testes/TesteBasico.java
+```
+
+## Exemplo de Saída (Mini-Java com `TesteBasico.java`)
+
+Ao rodar o scanner do Mini-Java com o arquivo `TesteBasico.java`, a saída será:
 
 ```
-Token: LPAREN (()
-Token: NUM_DECIMAL (100.25)
-Token: MINUS (-)
-Token: LPAREN (()
-Token: NUM_DECIMAL (2.5)
-Token: POWER (**)
-Token: NUM_INTEIRO (3)
-Token: RPAREN ())
-Token: RPAREN ())
-Token: INT_DIV (//)
-Token: NUM_INTEIRO (10)
-Token: TIMES (*)
-Token: NUM_INTEIRO (5)
-Token: PLUS (+)
-Token: LPAREN (()
-Token: NUM_INTEIRO (144)
-Token: DIV (/)
-Token: NUM_INTEIRO (12)
-Token: RPAREN ())
+Token reconhecido: KEYWORD_CLASS
+Token reconhecido: ID (TesteBasico)
+Token reconhecido: LBRACE
+Token reconhecido: KEYWORD_PUBLIC
+Token reconhecido: KEYWORD_STATIC
+Token reconhecido: KEYWORD_VOID
+Token reconhecido: KEYWORD_MAIN
+Token reconhecido: LPAREN
+Token reconhecido: KEYWORD_STRING
+Token reconhecido: LBRACKET
+Token reconhecido: RBRACKET
+Token reconhecido: ID (a)
+Token reconhecido: RPAREN
+Token reconhecido: LBRACE
+Token reconhecido: KEYWORD_PRINTLN
+Token reconhecido: LPAREN
+Token reconhecido: NUMBER (1)
+Token reconhecido: RPAREN
+Token reconhecido: SEMICOLON
+Token reconhecido: RBRACE
+Token reconhecido: RBRACE
 ```

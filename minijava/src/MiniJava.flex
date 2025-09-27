@@ -10,26 +10,25 @@
 /* Ignorar comentários e espaços em branco */
 "/*" ( [^*] | \*+[^*/] )* \*+ "/"  { /* Ação vazia para ignorar */ }
 
-"String"            { return "KEYWORD_STRING"; }
-"extends"           { return "KEYWORD_EXTENDS"; }
+"String"             { return "KEYWORD_STRING"; }
+"extends"            { return "KEYWORD_EXTENDS"; }
 "System.out.println" { return "KEYWORD_PRINTLN"; }
-"length"            { return "KEYWORD_LENGTH"; }
-"this"              { return "KEYWORD_THIS"; }
-"new"               { return "KEYWORD_NEW"; }
-
-"class"         { return "CLASS"; }
-"public"        { return "PUBLIC"; }
-"static"        { return "STATIC"; }
-"void"          { return "VOID"; }
-"main"          { return "MAIN"; }
-"int"           { return "INT"; }
-"boolean"       { return "BOOLEAN"; }
-"if"            { return "IF"; }
-"else"          { return "ELSE"; }
-"while"         { return "WHILE"; }
-"return"        { return "RETURN"; }
-"true"          { return "TRUE"; }
-"false"         { return "FALSE"; }
+"length"             { return "KEYWORD_LENGTH"; }
+"this"               { return "KEYWORD_THIS"; }
+"new"                { return "KEYWORD_NEW"; }
+"class"              { return "KEYWORD_CLASS"; }  
+"public"             { return "KEYWORD_PUBLIC"; }  
+"static"             { return "KEYWORD_STATIC"; } 
+"void"               { return "KEYWORD_VOID"; }    
+"main"               { return "KEYWORD_MAIN"; }  
+"int"                { return "KEYWORD_INT"; } 
+"boolean"            { return "KEYWORD_BOOLEAN"; } 
+"if"                 { return "KEYWORD_IF"; }   
+"else"               { return "KEYWORD_ELSE"; } 
+"while"              { return "KEYWORD_WHILE"; } 
+"return"             { return "KEYWORD_RETURN"; } 
+"true"               { return "KEYWORD_TRUE"; }  
+"false"              { return "KEYWORD_FALSE"; }  
 
 "{"             { return "LBRACE"; }
 "}"             { return "RBRACE"; }
