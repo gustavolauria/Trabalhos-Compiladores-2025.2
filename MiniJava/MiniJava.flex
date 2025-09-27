@@ -7,6 +7,16 @@
 
 %%
 
+/* Ignorar comentários e espaços em branco */
+"/*" ( [^*] | \*+[^*/] )* \*+ "/"  { /* Ação vazia para ignorar */ }
+
+"String"            { return "KEYWORD_STRING"; }
+"extends"           { return "KEYWORD_EXTENDS"; }
+"System.out.println" { return "KEYWORD_PRINTLN"; }
+"length"            { return "KEYWORD_LENGTH"; }
+"this"              { return "KEYWORD_THIS"; }
+"new"               { return "KEYWORD_NEW"; }
+
 "class"         { return "CLASS"; }
 "public"        { return "PUBLIC"; }
 "static"        { return "STATIC"; }
@@ -32,11 +42,16 @@
 "-"             { return "MINUS"; }
 "*"             { return "MULT"; }
 "<"             { return "LT"; }
+"&&"                { return "AND"; }
+"!"                 { return "NOT"; }
+"."                 { return "DOT"; }
+"["                 { return "LBRACKET"; } 
+"]"                 { return "RBRACKET"; }
 
-[0-9]+          { return "NUMBER(" + yytext() + ")"; }
-[a-zA-Z_][a-zA-Z0-9_]*   { return "ID(" + yytext() + ")"; }
+[0-9]+          { return "NUMBER (" + yytext() + ")"; }
+[a-zA-Z_][a-zA-Z0-9_]*   { return "ID (" + yytext() + ")"; }
 
 "//".*          { }
 [ \t\r\n]+      { }
 
-.               { return "UNKNOWN(" + yytext() + ")"; }
+.               { return "UNKNOWN (" + yytext() + ")"; }
