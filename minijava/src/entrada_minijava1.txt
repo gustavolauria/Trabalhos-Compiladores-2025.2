@@ -1,9 +1,0 @@
-class Test {
-    public static void main() {
-        int x;
-        x = 10;
-        if (x < 20) {
-            x = x + 1;
-        }
-    }
-}
