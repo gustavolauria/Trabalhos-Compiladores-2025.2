@@ -42,6 +42,7 @@ Trabalhos-Compiladores-2025.2/
     ├── jflex-1.9.1.jar
     ├── java-cup-11b.jar
 
+
 ## Como Rodar os Projetos
 
 ### Pré-requisitos
