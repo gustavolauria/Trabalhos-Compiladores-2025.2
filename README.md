@@ -6,7 +6,6 @@ Este projeto implementa dois analisadores léxicos (scanners) utilizando **JFlex
 
 O repositório está organizado em subprojetos para cada linguagem:
 
-```
 Trabalhos-Compiladores-2025.2/
 │
 ├── calculadora/
@@ -35,85 +34,60 @@ Trabalhos-Compiladores-2025.2/
 │       ├── ComentariosEspacamento.java
 │       ├── DeclaracoesExpressoes.java
 │       ├── EstruturasDeControle.java
-│       ├── FatorialCompleto.java
 │       ├── ClassesEObjetos.java
+│       ├── FatorialCompleto.java
 │       └── ErrosLexicos.java
 │
 └── libs/
     ├── jflex-1.9.1.jar
     ├── java-cup-11b.jar
-```
 
 ## Como Rodar os Projetos
 
 ### Pré-requisitos
 - Java (JDK) instalado.
-- Arquivo `jflex-1.9.1.jar` (ou similar) na pasta `libs/`.
+- Arquivos **jflex-1.9.1.jar** e **java-cup-11b.jar** na pasta *libs/*.
 
 ---
-### Para a Calculadora:
 
-Execute os seguintes comandos a partir da pasta raiz (`Compiladores`).
+### Para a Calculadora
+
+Execute os seguintes comandos a partir da pasta raiz (Trabalhos-Compiladores-2025.2).
 
 **1. Gerar o Scanner:**
-```bash
 java -jar libs/jflex-1.9.1.jar calculadora/src/Calculadora.flex
-```
 
-**2. Compilar:**
-```bash
-javac calculadora/src/*.java
-```
+**2. Gerar o Parser (CUP):**
+java -jar libs/java-cup-11b.jar -parser parser -symbols sym calculadora/src/Calculadora.cup
 
-**3. Executar (Exemplo):**
-```bash
-java -cp calculadora/src MainCalc calculadora/src/testes/entrada_calc_1.txt
-```
+**3. Compilar:**
+javac -cp libs/java-cup-11b.jar calculadora/src/*.java
+
+**4. Executar (Exemplo):**
+java -cp calculadora/src;libs/java-cup-11b.jar MainCalc calculadora/Testes/entrada_calc_1.txt
 
 ---
-### Para o Mini-Java:
 
-Execute os seguintes comandos a partir da pasta raiz (`Compiladores`).
+### Para o Mini-Java
+
+Execute os seguintes comandos a partir da pasta raiz (Trabalhos-Compiladores-2025.2).
 
 **1. Gerar o Scanner:**
-```bash
 java -jar libs/jflex-1.9.1.jar minijava/src/MiniJava.flex
-```
 
-**2. Compilar:**
-```bash
-javac minijava/src/*.java
-```
+**2. Gerar o Parser (CUP):**
+java -jar libs/java-cup-11b.jar -parser parser -symbols sym minijava/src/MiniJava.cup
 
-**3. Executar (Exemplo):**
-```bash
-java -cp minijava/src MainMiniJava minijava/src/testes/TesteBasico.java
-```
+**3. Compilar:**
+javac -cp libs/java-cup-11b.jar minijava/src/*.java
 
-## Exemplo de Saída (Mini-Java com `TesteBasico.java`)
+**4. Executar (Exemplo):**
+java -cp minijava/src;libs/java-cup-11b.jar MainMiniJava minijava/Testes/TesteBasico.java
 
-Ao rodar o scanner do Mini-Java com o arquivo `TesteBasico.java`, a saída será:
+---
 
-```
-Token reconhecido: KEYWORD_CLASS
-Token reconhecido: ID (TesteBasico)
-Token reconhecido: LBRACE
-Token reconhecido: KEYWORD_PUBLIC
-Token reconhecido: KEYWORD_STATIC
-Token reconhecido: KEYWORD_VOID
-Token reconhecido: KEYWORD_MAIN
-Token reconhecido: LPAREN
-Token reconhecido: KEYWORD_STRING
-Token reconhecido: LBRACKET
-Token reconhecido: RBRACKET
-Token reconhecido: ID (a)
-Token reconhecido: RPAREN
-Token reconhecido: LBRACE
-Token reconhecido: KEYWORD_PRINTLN
-Token reconhecido: LPAREN
-Token reconhecido: NUMBER (1)
-Token reconhecido: RPAREN
-Token reconhecido: SEMICOLON
-Token reconhecido: RBRACE
-Token reconhecido: RBRACE
-```
+## Exemplo de Saída (Mini-Java com TesteBasico.java)
+
+Ao rodar o scanner e parser do Mini-Java com o arquivo `TesteBasico.java`, a saída será:
+
+Programa sintaticamente correto!
