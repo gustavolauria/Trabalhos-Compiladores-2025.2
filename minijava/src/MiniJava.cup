@@ -1,0 +1,188 @@
+import java_cup.runtime.*;
+
+/* ==== TERMINAIS ==== */
+
+terminal CLASS, PUBLIC, STATIC, VOID, MAIN, STRING, EXTENDS, RETURN;
+terminal INT, BOOLEAN, TRUE, FALSE, THIS, NEW;
+terminal IF, ELSE, WHILE;
+terminal PRINTLN, LENGTH;
+terminal AND, LT, PLUS, MINUS, TIMES, DIV, NOT, ASSIGN;
+terminal LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET;
+terminal SEMICOLON, COMMA, DOT;
+terminal IDENT, INTEGER_LITERAL;
+
+/* ==== NÃO TERMINAIS ==== */
+
+non terminal Program,
+             ClassDeclList, ClassDecl, ClassBody, Member,
+             VarDecl, MethodDecl, MethodReturnType,
+             ParamListOpt, ParamList, MoreParams,
+             Type,
+             MethodBody, StatementOrVar,
+             Statement,
+             Expr, RelExpr, AddExpr, MultExpr, UnaryExpr, PrimaryExpr,
+             ExprListOpt, ExprList, ExprRest;
+
+/* Símbolo inicial */
+start with Program;
+
+/* ================= PROGRAMA ================= */
+
+/* Um programa é uma ou mais classes */
+Program ::= ClassDeclList ;
+
+/* Lista de classes */
+ClassDeclList ::= ClassDeclList ClassDecl
+                | ClassDecl
+                ;
+
+/* class C { ... }  ou  class B extends A { ... } */
+ClassDecl ::=
+      CLASS IDENT LBRACE ClassBody RBRACE
+    | CLASS IDENT EXTENDS IDENT LBRACE ClassBody RBRACE
+    ;
+
+/* Corpo de classe: zero ou mais membros (variáveis ou métodos) */
+ClassBody ::= ClassBody Member
+            | /* empty */
+            ;
+
+/* Membro de classe: variável ou método */
+Member ::= VarDecl
+         | MethodDecl
+         ;
+
+/* Declaração de variável: int x; boolean b; int[] a; NomeClasse obj; */
+VarDecl ::= Type IDENT SEMICOLON ;
+
+/* ================= MÉTODOS ================= */
+
+/* Método pode ser:
+   - public static void main(String[] a) { ... }
+   - public <tipo> nome(params) { ... }
+   - public void nome(params) { ... }
+*/
+MethodDecl ::=
+      PUBLIC STATIC VOID MAIN
+        LPAREN STRING LBRACKET RBRACKET IDENT RPAREN
+        LBRACE MethodBody RBRACE
+    | PUBLIC MethodReturnType IDENT LPAREN ParamListOpt RPAREN
+        LBRACE MethodBody RBRACE
+    ;
+
+/* Tipo de retorno para métodos "normais" */
+MethodReturnType ::= VOID
+                   | Type
+                   ;
+
+/* Lista de parâmetros: opcional */
+ParamListOpt ::= ParamList
+               | /* empty */
+               ;
+
+ParamList ::= Type IDENT MoreParams ;
+
+MoreParams ::= COMMA Type IDENT MoreParams
+             | /* empty */
+             ;
+
+/* Tipos: int, boolean, int[], ou nome de classe */
+Type ::= INT LBRACKET RBRACKET
+       | BOOLEAN
+       | INT
+       | IDENT
+       ;
+
+/* Corpo de método: mistura de declarações de variáveis e comandos */
+MethodBody ::= MethodBody StatementOrVar
+             | /* empty */
+             ;
+
+StatementOrVar ::= Statement
+                 | VarDecl
+                 ;
+
+/* ================= COMANDOS ================= */
+
+Statement ::=
+        /* bloco */
+        LBRACE MethodBody RBRACE
+
+      /* if (expr) stmt else stmt */
+      | IF LPAREN Expr RPAREN Statement ELSE Statement
+
+      /* while (expr) stmt */
+      | WHILE LPAREN Expr RPAREN Statement
+
+      /* System.out.println(expr); */
+      | PRINTLN LPAREN Expr RPAREN SEMICOLON
+
+      /* atribuição simples: x = expr; */
+      | IDENT ASSIGN Expr SEMICOLON
+
+      /* atribuição em arrays: a[i] = expr; */
+      | IDENT LBRACKET Expr RBRACKET ASSIGN Expr SEMICOLON
+
+      /* return expr; */
+      | RETURN Expr SEMICOLON
+
+      /* expressão como comando, ex: calcular(5); */
+      | Expr SEMICOLON
+    ;
+
+/* ================= EXPRESSÕES ================= */
+
+/* nível lógico-AND */
+Expr ::= Expr AND RelExpr
+       | RelExpr
+       ;
+
+/* nível comparação < */
+RelExpr ::= RelExpr LT AddExpr
+          | AddExpr
+          ;
+
+/* soma/subtração */
+AddExpr ::= AddExpr PLUS MultExpr
+          | AddExpr MINUS MultExpr
+          | MultExpr
+          ;
+
+/* multiplicação/divisão */
+MultExpr ::= MultExpr TIMES UnaryExpr
+           | MultExpr DIV UnaryExpr
+           | UnaryExpr
+           ;
+
+/* unário: !expr, -expr ou primário */
+UnaryExpr ::= NOT UnaryExpr
+            | MINUS UnaryExpr
+            | PrimaryExpr
+            ;
+
+/* primário: números, booleanos, variáveis, this, new, chamadas, arrays, () */
+PrimaryExpr ::=
+        INTEGER_LITERAL
+      | TRUE
+      | FALSE
+      | IDENT
+      | THIS
+      | NEW INT LBRACKET Expr RBRACKET
+      | NEW IDENT LPAREN RPAREN
+      | LPAREN Expr RPAREN
+      | IDENT LBRACKET Expr RBRACKET
+
+      /* encadeamento após qualquer PrimaryExpr */
+      | PrimaryExpr DOT LENGTH
+      | PrimaryExpr DOT IDENT LPAREN ExprListOpt RPAREN
+      ;
+
+ExprListOpt ::= ExprList
+              | /* empty */
+              ;
+
+ExprList ::= Expr ExprRest ;
+
+ExprRest ::= COMMA Expr ExprRest
+           | /* empty */
+           ;
