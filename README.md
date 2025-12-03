@@ -7,22 +7,41 @@ Este projeto implementa dois analisadores léxicos (scanners) utilizando **JFlex
 O repositório está organizado em subprojetos para cada linguagem:
 
 ```
-Compiladores/
-├── calculadora/
-│   └── src/
-│       ├── Calculadora.flex
-│       ├── MainCalc.java
-│       └── testes/
-│           ├── entrada_calc_1.txt
-│           ├── ...
+Trabalhos-Compiladores-2025.2/
 │
-└── minijava/
-    └── src/
-        ├── MiniJava.flex
-        ├── MainMiniJava.java
-        └── testes/
-            ├── TesteBasico.java
-            └── ...
+├── calculadora/
+│   ├── src/
+│   │   ├── Calculadora.flex
+│   │   ├── Calculadora.cup
+│   │   ├── CalcScanner.java
+│   │   ├── MainCalc.java
+│   │   ├── parser.java
+│   │   ├── sym.java
+│   └── Testes/
+│       ├── entrada_calc_1.txt
+│       ├── entrada_calc_2.txt
+│       └── entrada_calc_3.txt
+│
+├── minijava/
+│   ├── src/
+│   │   ├── MiniJava.flex
+│   │   ├── MiniJava.cup
+│   │   ├── MiniJavaScanner.java
+│   │   ├── MainMiniJava.java
+│   │   ├── parser.java
+│   │   ├── sym.java
+│   └── Testes/
+│       ├── TesteBasico.java
+│       ├── ComentariosEspacamento.java
+│       ├── DeclaracoesExpressoes.java
+│       ├── EstruturasDeControle.java
+│       ├── FatorialCompleto.java
+│       ├── ClassesEObjetos.java
+│       └── ErrosLexicos.java
+│
+└── libs/
+    ├── jflex-1.9.1.jar
+    ├── java-cup-11b.jar
 ```
 
 ## Como Rodar os Projetos
