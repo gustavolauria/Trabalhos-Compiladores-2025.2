@@ -1,0 +1,36 @@
+import java_cup.runtime.*;
+
+/* Terminais vindos do scanner (Calculadora.flex / CalcScanner) */
+terminal SOMA, SUB, MULT, DIV, POT, PA, PF, INTDIV;
+terminal Double NUM;
+
+/* Não-terminais, todos com tipo Double (valor da expressão) */
+non terminal Double Exp, Term, Pot, Fator;
+
+/* Símbolo inicial */
+start with Exp;
+
+/* Gramática G1 COM ações, SEM precedence nem $1/$3 */
+
+Exp ::=
+      Exp:e SOMA Term:t   {: RESULT = e + t; :}
+    | Exp:e SUB  Term:t   {: RESULT = e - t; :}
+    | Term:t              {: RESULT = t;     :}
+    ;
+
+Term ::=
+      Term:t MULT Pot:p    {: RESULT = t * p; :}
+    | Term:t DIV  Pot:p    {: RESULT = t / p; :}
+    | Term:t INTDIV Pot:p  {: RESULT = Math.floor(t / p); :}
+    | Pot:p                {: RESULT = p;     :}
+    ;
+
+Pot ::=
+      Pot:p  POT  Fator:f  {: RESULT = Math.pow(p, f); :}
+    | Fator:f              {: RESULT = f;              :}
+    ;
+
+Fator ::=
+      PA Exp:e PF          {: RESULT = e; :}
+    | NUM:n                {: RESULT = n; :}
+    ;

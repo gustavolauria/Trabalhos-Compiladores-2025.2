@@ -1,33 +1,50 @@
+/* Calculadora.flex - scanner compatível com CUP (aceita int, decimal, //, **) */
 
+import java_cup.runtime.Symbol;
 
 %%
-
 %class CalcScanner
 %unicode
-%public
-%type String
+%cup
+%line
+%column
+
+INT     = [0-9]+
+DEC     = {INT}"."{INT}
 
 %%
 
-/* Espaços em Branco (Ignorar) */
-[ \t\r\n]+              { }
+"("         { return new Symbol(sym.PA); }
+")"         { return new Symbol(sym.PF); }
 
-/* Números */
-[0-9]+\.[0-9]+          { return "NUM_DECIMAL"; }
-[0-9]+                  { return "NUM_INTEIRO"; }
+"+"         { return new Symbol(sym.SOMA); }
+"-"         { return new Symbol(sym.SUB); }
 
-/* Parênteses */
-"("                     { return "LPAREN"; }
-")"                     { return "RPAREN"; }
+/* importante: padrões mais longos vêm antes dos mais curtos */
+"//"        { return new Symbol(sym.INTDIV); }
+"**"        { return new Symbol(sym.POT); }
 
-/* Operadores (mais longos primeiro) */
-"**"                    { return "POWER"; }
-"//"                    { return "INT_DIV"; }
-"+"                     { return "PLUS"; }
-"-"                     { return "MINUS"; }
-"*"                     { return "TIMES"; }
-"/"                     { return "DIV"; }
+"*"         { return new Symbol(sym.MULT); }
+"/"         { return new Symbol(sym.DIV); }
 
+/* números decimais e inteiros */
+{DEC}       {
+                double val = Double.parseDouble(yytext());
+                return new Symbol(sym.NUM, val);
+            }
 
-/* Tratamento de Erros */
-.                       { return "ERROR"; }
+{INT}       {
+                double val = Double.parseDouble(yytext());
+                return new Symbol(sym.NUM, val);
+            }
+
+/* ignorar espaços, tabs e \r */
+[ \t\r]+    { /* ignora */ }
+
+/* ignorar quebras de linha */
+\n          { /* ignora */ }
+
+/* fim de arquivo */
+<<EOF>>     { return new Symbol(sym.EOF); }
+
+/* qualquer outra coisa é erro léxico */

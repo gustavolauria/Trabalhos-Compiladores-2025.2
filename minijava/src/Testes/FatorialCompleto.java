@@ -1,14 +1,18 @@
 class FatorialCompleto {
     public static void main(String[] a) {
-        System.out.println(new Fatorial().calcular(5));
-    }
-}
+        int n;
+        int resultado;
+        int i;
 
-class Fatorial {
-    public int calcular(int n) {
-        if (n < 1) 
-            return 1;
-        else 
-            return n * calcular(n - 1);
+        n = 5;
+        resultado = 1;
+        i = 1;
+
+        while (i < n + 1) {
+            resultado = resultado * i;
+            i = i + 1;
+        }
+
+        System.out.println(resultado);
     }
 }

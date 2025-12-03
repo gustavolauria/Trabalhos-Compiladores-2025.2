@@ -1,56 +1,99 @@
-%%
+import java_cup.runtime.Symbol;
 
+%%
 %class MiniJavaScanner
-%unicode
 %public
-%type String
+%unicode
+%cup
+%line
+%column
+
+ID  = [a-zA-Z_][a-zA-Z0-9_]*
+INT = [0-9]+
 
 %%
 
-/* Ignorar comentários e espaços em branco */
-"/*" ( [^*] | \*+[^*/] )* \*+ "/"  { /* Ação vazia para ignorar */ }
+/* PALAVRAS-CHAVE */
 
-"String"             { return "KEYWORD_STRING"; }
-"extends"            { return "KEYWORD_EXTENDS"; }
-"System.out.println" { return "KEYWORD_PRINTLN"; }
-"length"             { return "KEYWORD_LENGTH"; }
-"this"               { return "KEYWORD_THIS"; }
-"new"                { return "KEYWORD_NEW"; }
-"class"              { return "KEYWORD_CLASS"; }  
-"public"             { return "KEYWORD_PUBLIC"; }  
-"static"             { return "KEYWORD_STATIC"; } 
-"void"               { return "KEYWORD_VOID"; }    
-"main"               { return "KEYWORD_MAIN"; }  
-"int"                { return "KEYWORD_INT"; } 
-"boolean"            { return "KEYWORD_BOOLEAN"; } 
-"if"                 { return "KEYWORD_IF"; }   
-"else"               { return "KEYWORD_ELSE"; } 
-"while"              { return "KEYWORD_WHILE"; } 
-"return"             { return "KEYWORD_RETURN"; } 
-"true"               { return "KEYWORD_TRUE"; }  
-"false"              { return "KEYWORD_FALSE"; }  
+"class"      { return new Symbol(sym.CLASS,   yyline, yycolumn); }
+"public"     { return new Symbol(sym.PUBLIC,  yyline, yycolumn); }
+"static"     { return new Symbol(sym.STATIC,  yyline, yycolumn); }
+"void"       { return new Symbol(sym.VOID,    yyline, yycolumn); }
+"main"       { return new Symbol(sym.MAIN,    yyline, yycolumn); }
+"String"     { return new Symbol(sym.STRING,  yyline, yycolumn); }
+"extends"    { return new Symbol(sym.EXTENDS, yyline, yycolumn); }
+"return"     { return new Symbol(sym.RETURN,  yyline, yycolumn); }
 
-"{"             { return "LBRACE"; }
-"}"             { return "RBRACE"; }
-"("             { return "LPAREN"; }
-")"             { return "RPAREN"; }
-";"             { return "SEMICOLON"; }
-","             { return "COMMA"; }
-"="             { return "ASSIGN"; }
-"+"             { return "PLUS"; }
-"-"             { return "MINUS"; }
-"*"             { return "MULT"; }
-"<"             { return "LT"; }
-"&&"                { return "AND"; }
-"!"                 { return "NOT"; }
-"."                 { return "DOT"; }
-"["                 { return "LBRACKET"; } 
-"]"                 { return "RBRACKET"; }
+"int"        { return new Symbol(sym.INT,     yyline, yycolumn); }
+"boolean"    { return new Symbol(sym.BOOLEAN, yyline, yycolumn); }
+"true"       { return new Symbol(sym.TRUE,    yyline, yycolumn); }
+"false"      { return new Symbol(sym.FALSE,   yyline, yycolumn); }
+"this"       { return new Symbol(sym.THIS,    yyline, yycolumn); }
+"new"        { return new Symbol(sym.NEW,     yyline, yycolumn); }
 
-[0-9]+          { return "NUMBER (" + yytext() + ")"; }
-[a-zA-Z_][a-zA-Z0-9_]*   { return "ID (" + yytext() + ")"; }
+"if"         { return new Symbol(sym.IF,      yyline, yycolumn); }
+"else"       { return new Symbol(sym.ELSE,    yyline, yycolumn); }
+"while"      { return new Symbol(sym.WHILE,   yyline, yycolumn); }
 
-"//".*          { }
-[ \t\r\n]+      { }
+"System.out.println" { return new Symbol(sym.PRINTLN, yyline, yycolumn); }
+"length"     { return new Symbol(sym.LENGTH,  yyline, yycolumn); }
 
-.               { return "UNKNOWN (" + yytext() + ")"; }
+/* OPERADORES */
+
+"&&"         { return new Symbol(sym.AND,     yyline, yycolumn); }
+"<"          { return new Symbol(sym.LT,      yyline, yycolumn); }
+"+"          { return new Symbol(sym.PLUS,    yyline, yycolumn); }
+"-"          { return new Symbol(sym.MINUS,   yyline, yycolumn); }
+"*"          { return new Symbol(sym.TIMES,   yyline, yycolumn); }
+"/"          { return new Symbol(sym.DIV,     yyline, yycolumn); }
+"!"          { return new Symbol(sym.NOT,     yyline, yycolumn); }
+"="          { return new Symbol(sym.ASSIGN,  yyline, yycolumn); }
+
+/* DELIMITADORES */
+
+"("          { return new Symbol(sym.LPAREN,   yyline, yycolumn); }
+")"          { return new Symbol(sym.RPAREN,   yyline, yycolumn); }
+"{"          { return new Symbol(sym.LBRACE,   yyline, yycolumn); }
+"}"          { return new Symbol(sym.RBRACE,   yyline, yycolumn); }
+"["          { return new Symbol(sym.LBRACKET, yyline, yycolumn); }
+"]"          { return new Symbol(sym.RBRACKET, yyline, yycolumn); }
+";"          { return new Symbol(sym.SEMICOLON,yyline, yycolumn); }
+","          { return new Symbol(sym.COMMA,    yyline, yycolumn); }
+"."          { return new Symbol(sym.DOT,      yyline, yycolumn); }
+
+/* LITERAIS */
+
+{INT}        {
+                int val = Integer.parseInt(yytext());
+                return new Symbol(sym.INTEGER_LITERAL, yyline, yycolumn, val);
+             }
+
+{ID}         {
+                return new Symbol(sym.IDENT, yyline, yycolumn, yytext());
+             }
+
+/* COMENTÁRIOS */
+
+// comentário de linha
+"//".*       { /* ignora */ }
+
+/* comentário de bloco */
+"/*" ([^*]|\*+[^*/])* \*+ "/"   { /* ignora */ }
+
+/* ESPAÇOS */
+
+[ \t\r\n\f]+ { /* ignora */ }
+
+/* FIM DE ARQUIVO */
+
+<<EOF>>      { return new Symbol(sym.EOF, yyline, yycolumn); }
+
+/* QUALQUER OUTRO SÍMBOLO = ERRO LÉXICO */
+
+.            {
+                System.err.println(
+                    "Erro léxico: caractere inválido '" + yytext() +
+                    "' na linha " + yyline + ", coluna " + yycolumn
+                );
+                throw new Error("Erro léxico");
+             }
