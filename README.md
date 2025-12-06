@@ -79,7 +79,7 @@ javac -cp libs/java-cup-11b.jar calculadora/src/*.java
 ### **Passo 4 — Executar**
 
 ```bash
-java -cp "calculadora/src;libs/java-cup-11b.jar" MainCalc calculadora/Testes/entrada_calc_1.txt
+java -cp "calculadora/src;libs/java-cup-11b.jar" MainCalc calculadora/src/Testes/entrada_calc_1.txt
 ```
 
 ---
@@ -107,7 +107,7 @@ javac -cp libs/java-cup-11b.jar minijava/src/*.java
 ### **Passo 4 — Executar**
 
 ```bash
-java -cp "minijava/src;libs/java-cup-11b.jar" MainMiniJava minijava/Testes/TesteBasico.java
+java -cp "minijava/src;libs/java-cup-11b.jar" MainMiniJava minijava/src/Testes/TesteBasico.java
 ```
 
 
